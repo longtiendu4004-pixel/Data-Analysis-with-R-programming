@@ -1,6 +1,6 @@
 setwd("D:/DA with R/DA/week1")
 Data <- read.csv("dulieu2.csv", header = TRUE)
-
+View(Data)
 #a, Nhập dữ liệu (“dulieu2.csv”) vào R và loại bỏ dữ liệu trống.
 colSums(is.na(Data))# các cột hiển thị 0 => no empty
 
