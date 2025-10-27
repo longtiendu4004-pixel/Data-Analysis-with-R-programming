@@ -56,7 +56,9 @@ finalScore = round(runif(n, min = 3, max = 9.5), 1)
 overallScore = round(regularScore * 0.1 + midtermScore * 0.3 + finalScore * 0.6, 1)
 results = ifelse(overallScore >= 4, "Pass", "Fail")
 detailStudent = data.frame(ID, gender, age, height, weight, regularScore,midtermScore, finalScore, overallScore, results)
-View(detailStudent)
+
+table(results)
+# runif(n, min, max) : sinh n dữ liệu từ min - max là số thực
 # b) Lấy từ dữ liệu trên danh sách sinh viên của điểm thi cuối kỳ lớn hơn hoặc
 # bằng 9.
 finalScoreHigherNine = detailStudent[detailStudent$finalScore >= 9,]
@@ -64,20 +66,44 @@ View(finalScoreHigherNine)
 
 # c) Bạn sinh viên có ID=5 có điểm chuyên cần bị sai, phải sửa lại là 10. Thực
 # hiện thao tác đó với R
+detailStudent[detailStudent$ID == 5, "regularScore"] = 10
 
 
-# d) Thêm một cột tên là “tổng điểm” được tính theo công thức tổng= điểm
-# thường xuyên*0.2+điểm giữa kỳ*0.2+điểm cuối kỳ*0.6.
 # e) Nếu tổng điểm lớn hơn hoặc bằng 9.0 được xếp điểm A+, 8.5&lt;= điểm
 # tổng &lt; 9 được xếp điểm A, 8.0&lt;= điểm tổng &lt; 8.5 được xếp điểm B+,
 # 7.0&lt;= điểm tổng &lt;8.0 được xếp điểm B, điểm tổng &lt; 7.0 được xếp điểm
-# C. Hãy kiểm tra xem bạn có ID=10 được điểm chữ là bao nhiêu?
-#   f) Hãy đưa ra điểm chữ cho các bạn sinh viên có điểm thi cuối kỳ lớn hơn
-# hoặc bằng 9.0.
+updateScores = function(df){
+  df$overallScore = round(df$regularScore * 0.1 + df$midtermScore * 0.3 + df$finalScore * 0.6, 1)
+  df$GPA = character(length(df$overallScore))
+  for (i in 1:length(df$overallScore)) {
+    point <- df$overallScore[i]
+    
+    if (point >= 9) df$GPA[i] <- "A+"
+    else if (point >= 8.5) df$GPA[i] <- "A"
+    else if (point >= 8) df$GPA[i] <- "B+"
+    else if (point >= 7) df$GPA[i] <- "B"
+    else if (point >= 6) df$GPA[i] <- "C+"
+    else if (point >= 5) df$GPA[i] <- "C"
+    else if (point >= 4) df$GPA[i] <- "D"
+    else df$GPA[i] <- "F"
+  }
+  return(df)
+}
+detailStudent = updateScores(detailStudent)
+View(detailStudent)
 # g) Có bao nhiêu bạn sinh viên có điểm giữa kì là 0 nhưng lại qua môn?
+detailStudent[detailStudent$ID == 200, "midtermScore"] = 0 
+View(detailStudent)
+detailStudent[detailStudent$midtermScore == 0 & detailStudent$overallScore >= 4, "ID"]
 #   h) Hãy tính tỉ lệ phần trăm của các bạn được điểm “B”
+percentage_B = length(detailStudent$GPA[detailStudent$GPA == "B"]) * 100 / n
+percentage_B
 # i) Tỉ lệ này sẽ thay đổi như nào nếu ta cộng thêm mỗi sinh viên 2đ giữa kỳ.
 # (Bạn nào quá 10 điểm thì chỉ đạt 10đ). Câu hỏi này tương tự với ý g)
+detailStudent$midtermScore = ifelse(detailStudent$midtermScore < 8, detailStudent$midtermScore + 2, 10)
+detailStudent = updateScores(detailStudent)
+percentage_B_updated = length(detailStudent$GPA[detailStudent$GPA == "B"]) * 100 / n
+percentage_B_updated
 
 
 
