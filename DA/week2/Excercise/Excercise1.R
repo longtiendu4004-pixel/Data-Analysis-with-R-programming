@@ -45,5 +45,4 @@ check = Function(x, M){
 # hộ dân. Biết rằng, véc tơ này có phân phối chuẩn với cùng trung bình và
 # độ lệch tiêu chuẩn của dữ liệu ban đầu.
 
-DataNew = 
 

@@ -20,6 +20,7 @@ df_empty1 = df_empty1[df_empty1 > 0] # Chỉ lấy các cột > 0
 df_empty1 = names(df_empty1) #Lấy tên các cột
 
 for(name in df_empty1){
+
   who[[name]][is.na(who[[name]])] = mean(who[[name]], na.rm = T)
 }
 
