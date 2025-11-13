@@ -9,11 +9,12 @@ percent = sample(1:n, size = n * 0.7)
 data70 = data[percent, ]
 data30 = data[-percent, ]
 #e
-View(data)
+
 evaluation_alcohol = function(data){
   k = data$alcohol * data$quality / data$pH
-  ifelse(k > 7.5, "Tốt", "Xấu")
+  result = ifelse(k > 7.5, "Tốt", "Xấu")
+  return(result)
 }
 data$eval = evaluation_alcohol(data)
 result = data[data$citric.acid == 0.08 & data$chlorides == 0.086 & data$fixed.acidity == 7.4, "eval"]
-
+View(data)
